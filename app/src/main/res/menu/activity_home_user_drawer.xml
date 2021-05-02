@@ -5,20 +5,26 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:id="@+id/nav_home_admin"
+            android:icon="@drawable/home"
+            android:title= "Home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_delete_user"
+            android:icon="@drawable/delete"
+            android:title= "Delete a User" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_make_admin"
+            android:icon="@drawable/person"
+            android:title= "Make User an Admin" />
+        <item
+            android:id="@+id/nav_view_all_reserves"
+            android:icon="@drawable/car"
+            android:title= "View All Reservations" />
         <item
             android:id="@+id/logoutButton"
             android:icon="@android:drawable/ic_lock_power_off"
             android:title="Logout" />
+
+
     </group>
 </menu>

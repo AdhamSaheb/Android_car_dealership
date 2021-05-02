@@ -3,23 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_profile">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.car_dealership_project.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home"/>
-
+        android:id="@+id/nav_profile"
+        android:name="com.example.car_dealership_project.drawer.nav_profile"
+        android:label="fragment_nav_profile"
+        tools:layout="@layout/fragment_nav_profile" />
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.car_dealership_project.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
+        android:id="@+id/nav_home_admin"
+        android:name="com.example.car_dealership_project.drawer.nav_home_admin"
+        android:label="fragment_nav_home_admin"
+        tools:layout="@layout/fragment_nav_home_admin" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.car_dealership_project.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_delete_user"
+        android:name="com.example.car_dealership_project.drawer.nav_delete_user"
+        android:label="fragment_nav_delete_user"
+        tools:layout="@layout/fragment_nav_delete_user" />
+    <fragment
+        android:id="@+id/nav_make_admin"
+        android:name="com.example.car_dealership_project.drawer.nav_make_admin"
+        android:label="fragment_nav_make_admin"
+        tools:layout="@layout/fragment_nav_make_admin" />
+    <fragment
+        android:id="@+id/nav_view_all_reserves"
+        android:name="com.example.car_dealership_project.drawer.nav_view_all_reserves"
+        android:label="fragment_nav_view_all_reserves"
+        tools:layout="@layout/fragment_nav_view_all_reserves" />
 </navigation>

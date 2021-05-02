@@ -32,24 +32,25 @@ public class HomeUser extends AppCompatActivity {
         setContentView(R.layout.activity_home_user);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //floating action button
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.logoutButton)
-                .setDrawerLayout(drawer)
-                .build();
+        /*Build the drawer based on user type */
+        if(isAdmin()) {
+            System.out.println("here");
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_home_admin, R.id.nav_delete_user, R.id.nav_make_admin,R.id.logoutButton)
+                    .setDrawerLayout(drawer)
+                    .build();
+        }else{
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_profile, R.id.logoutButton)
+                    .setDrawerLayout(drawer)
+                    .build();
+        }
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -66,11 +67,13 @@ public class HomeUser extends AppCompatActivity {
 
 
         //set first name in nav bar
-        String firstName  = getFirstName();
+        String firstName = getFirstName();
         View headerView = navigationView.getHeaderView(0);
-        final TextView firstNameNav =  (TextView) headerView.findViewById(R.id.nav_firstName);
+        final TextView firstNameNav = (TextView) headerView.findViewById(R.id.nav_firstName);
         firstNameNav.setText(firstName);
         //TODO : set image
+
+
     }
 
 
@@ -88,9 +91,9 @@ public class HomeUser extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    void logout(){
+    void logout() {
         //clear shared prefrences
-        SharedPreferences.Editor editor = getSharedPreferences("SignedIn" , MODE_PRIVATE ).edit();
+        SharedPreferences.Editor editor = getSharedPreferences("SignedIn", MODE_PRIVATE).edit();
         editor.putString("Email", "Default");
         editor.apply();
         Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -98,21 +101,32 @@ public class HomeUser extends AppCompatActivity {
     }
 
     //loads email from local preferences
-    String loadEmailFromLocal(){
+    String loadEmailFromLocal() {
         SharedPreferences prefs = this.getSharedPreferences(
                 "SignedIn", Context.MODE_PRIVATE);
-        return prefs.getString("Email" , "Default");
+        return prefs.getString("Email", "Default");
     }
 
-    String getFirstName(){
-        String email = loadEmailFromLocal() ;
-        DatabaseHelper dataBaseHelper =new
-                DatabaseHelper(getApplicationContext(),"Project",null,1);
+    String getFirstName() {
+        String email = loadEmailFromLocal();
+        DatabaseHelper dataBaseHelper = new
+                DatabaseHelper(getApplicationContext(), "Project", null, 1);
         /*Navigate based on user  type */
         final Cursor firstName = dataBaseHelper.getFirstName(email);
         if (firstName.moveToFirst()) {
             return firstName.getString(0);
         }
-        return "" ;
+        return "";
+    }
+
+    boolean isAdmin() {
+        DatabaseHelper dataBaseHelper = new
+                DatabaseHelper(getApplicationContext(), "Project", null, 1);
+        final Cursor isAdmin = dataBaseHelper.isAdmin(loadEmailFromLocal());
+        if (isAdmin.moveToFirst()) {
+            System.out.println(isAdmin.getInt(0));
+            return( isAdmin.getInt(0) == 1 );
+        }
+        return false ; // unreachable
     }
 }
