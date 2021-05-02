@@ -68,9 +68,13 @@ public class Login extends AppCompatActivity {
                         if(HashHelper.md5(Password.getText().toString()).equals(EmailPassword.getString(0))) {
                             /* save log in stats */
                             SharedPreferences.Editor editor = getSharedPreferences("SignedIn" , MODE_PRIVATE ).edit();
-                            editor.putString("Email", Email.getText().toString()); // This will laterindicate that user is still logged in
+                            editor.putString("Email", Email.getText().toString()); // This will later indicate that user is still logged in
                             editor.apply();
-                            /*Navigate based on user  type */
+                            /*Navigate*/
+                            Intent intent = new Intent(getApplicationContext(), HomeUser.class);
+                            startActivity(intent);
+
+                            /*
                             final Cursor isAdmin = dataBaseHelper.isAdmin(Email.getText().toString());
                             if (isAdmin.moveToFirst()) {
                                 System.out.println(isAdmin.getInt(0));
@@ -83,7 +87,7 @@ public class Login extends AppCompatActivity {
                                     Intent intent = new Intent(getApplicationContext(), HomeUser.class);
                                     startActivity(intent);
                                 }
-                            }
+                            }*/
 
 
                             //if remember me checked, save the email to local preferences

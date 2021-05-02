@@ -1,12 +1,14 @@
 package com.example.car_dealership_project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,14 +32,16 @@ public class HomeUser extends AppCompatActivity {
         setContentView(R.layout.activity_home_user);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //floating action button
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -59,7 +63,16 @@ public class HomeUser extends AppCompatActivity {
                 return true;
             }
         });
+
+
+        //set first name in nav bar
+        String firstName  = getFirstName();
+        View headerView = navigationView.getHeaderView(0);
+        final TextView firstNameNav =  (TextView) headerView.findViewById(R.id.nav_firstName);
+        firstNameNav.setText(firstName);
+        //TODO : set image
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,5 +95,24 @@ public class HomeUser extends AppCompatActivity {
         editor.apply();
         Intent intent = new Intent(getApplicationContext(), Login.class);
         startActivity(intent);
+    }
+
+    //loads email from local preferences
+    String loadEmailFromLocal(){
+        SharedPreferences prefs = this.getSharedPreferences(
+                "SignedIn", Context.MODE_PRIVATE);
+        return prefs.getString("Email" , "Default");
+    }
+
+    String getFirstName(){
+        String email = loadEmailFromLocal() ;
+        DatabaseHelper dataBaseHelper =new
+                DatabaseHelper(getApplicationContext(),"Project",null,1);
+        /*Navigate based on user  type */
+        final Cursor firstName = dataBaseHelper.getFirstName(email);
+        if (firstName.moveToFirst()) {
+            return firstName.getString(0);
+        }
+        return "" ;
     }
 }

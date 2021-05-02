@@ -79,4 +79,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT IsADMIN FROM USERS WHERE EMAIL = '" + email+"'", null);
     }
+
+    public Cursor getFirstName(String email) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT FIRSTNAME FROM USERS WHERE EMAIL = '" + email+"'", null);
+    }
+
+
+
 }

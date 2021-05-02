@@ -32,11 +32,14 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(view.getContext(), Login.class);
                     view.getContext().startActivity(intent);
                 }else{ // navigate based on type
+                    /*Navigate*/
+                    Intent intent = new Intent(getApplicationContext(), HomeUser.class);
+                    startActivity(intent);
+                    /*
                     String email = loadEmailFromLocal() ;
-                    /*Navigate based on user  type */
                     final Cursor isAdmin = dataBaseHelper.isAdmin(email);
                     if (isAdmin.moveToFirst()) {
-                        System.out.println(isAdmin.getInt(0));
+                        //System.out.println(isAdmin.getInt(0));
                         if(isAdmin.getInt(0)  == 0 ) {//user
                             Intent intent = new Intent(getApplicationContext(), HomeUser.class);
                             startActivity(intent);
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), HomeUser.class);
                             startActivity(intent);
                         }
-                    }
+                    }*/
                 }
 
             }
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     "SignedIn", Context.MODE_PRIVATE);
             if( prefs.getString("Email" , "Default").equals("Default") ) return false  ;
             return  true;
-        }
+    }
     //loads email from local preferences
     String loadEmailFromLocal(){
         SharedPreferences prefs = this.getSharedPreferences(
