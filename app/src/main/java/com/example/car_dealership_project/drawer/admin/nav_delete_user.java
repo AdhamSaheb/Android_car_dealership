@@ -1,4 +1,4 @@
-package com.example.car_dealership_project.drawer;
+package com.example.car_dealership_project.drawer.admin;
 
 import android.os.Bundle;
 

@@ -38,17 +38,36 @@ public class HomeUser extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         /*Build the drawer based on user type */
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_view_all_reserves,
+                R.id.nav_home_admin,
+                R.id.nav_delete_user,
+                R.id.nav_make_admin,
+                R.id.nav_profile,
+                R.id.nav_home_user,
+                R.id.nav_all_cars,
+                R.id.nav_user_reservations,
+                R.id.nav_special_offers,
+                R.id.nav_favorites,
+                R.id.nav_call_us,
+
+                R.id.logoutButton)
+                .setDrawerLayout(drawer)
+                .build();
+        //hide un needed items from drawer
         if(isAdmin()) {
-            System.out.println("here");
-            mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home_admin, R.id.nav_delete_user, R.id.nav_make_admin,R.id.logoutButton)
-                    .setDrawerLayout(drawer)
-                    .build();
+            navigationView.getMenu().findItem(R.id.nav_home_user).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_all_cars).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_user_reservations).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_special_offers).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_call_us).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
         }else{
-            mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_profile, R.id.logoutButton)
-                    .setDrawerLayout(drawer)
-                    .build();
+            navigationView.getMenu().findItem(R.id.nav_make_admin).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_delete_user).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_home_admin).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_view_all_reserves).setVisible(false);
         }
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

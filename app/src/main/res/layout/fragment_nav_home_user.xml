@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".drawer.admin.nav_view_all_reserves">
+    tools:context=".drawer.user.nav_home_user">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
