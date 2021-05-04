@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +26,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO : CONNECT TO REST API
-                DatabaseHelper dataBaseHelper =new
+                try{
+                    /* Connect to api and load data */
+                    ConnectionAsyncTask connectionAsyncTask = new
+                            ConnectionAsyncTask(MainActivity.this);
+                    connectionAsyncTask.execute("http://www.mocky.io/v2/5bfea5963100006300bb4d9a");
+                    //Navigate
+                                    DatabaseHelper dataBaseHelper =new
                         DatabaseHelper(getApplicationContext(),"Project",null,1);
                 //check if there is a user logged in
                 if(!isSignedIn()) {
@@ -35,22 +42,20 @@ public class MainActivity extends AppCompatActivity {
                     /*Navigate*/
                     Intent intent = new Intent(getApplicationContext(), HomeUser.class);
                     startActivity(intent);
-                    /*
-                    String email = loadEmailFromLocal() ;
-                    final Cursor isAdmin = dataBaseHelper.isAdmin(email);
-                    if (isAdmin.moveToFirst()) {
-                        //System.out.println(isAdmin.getInt(0));
-                        if(isAdmin.getInt(0)  == 0 ) {//user
-                            Intent intent = new Intent(getApplicationContext(), HomeUser.class);
-                            startActivity(intent);
-                        }
-                        else{//admin
-                            //TODO: CHANGE TO HOME ADMIN
-                            Intent intent = new Intent(getApplicationContext(), HomeUser.class);
-                            startActivity(intent);
-                        }
-                    }*/
                 }
+                    //show Successful tost
+                    Toast toast =Toast.makeText(MainActivity.this,
+                            "Connection Successful, Data Loaded",Toast.LENGTH_SHORT);
+                    toast.show();
+
+                }catch (Exception e ) {
+                    //show error tost
+                    Toast toast =Toast.makeText(MainActivity.this,
+                            "Connection Was Not Successful",Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+
 
             }
             });
