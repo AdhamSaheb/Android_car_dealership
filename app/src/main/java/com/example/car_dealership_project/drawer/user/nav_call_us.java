@@ -86,9 +86,13 @@ public class nav_call_us extends Fragment {
         gmailButton.setOnClickListener(new View.OnClickListener() { @Override
         public void onClick(View view) {
             Intent gmailIntent =new Intent();
-            gmailIntent.setAction(Intent.ACTION_SENDTO);
-            gmailIntent.setDataAndType(Uri.parse("mailto:"),"message/rfc822");
-            gmailIntent.putExtra(Intent.EXTRA_EMAIL,"CarDealer@cars.com");
+            try {
+                gmailIntent.setAction(Intent.ACTION_SENDTO);
+                gmailIntent.setDataAndType(Uri.parse("mailto:"), "message/rfc822");
+                gmailIntent.putExtra(Intent.EXTRA_EMAIL, "CarDealer@cars.com");
+            }catch (Exception e ) {
+                e.printStackTrace();
+            }
 //            gmailIntent.putExtra(Intent.EXTRA_SUBJECT,"My Subject");
 //            gmailIntent.putExtra(Intent.EXTRA_TEXT,"Content of the message");
             startActivity(gmailIntent);
