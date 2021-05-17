@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#F8F8F8">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/car_name"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="Chevrolet"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:background="@color/colorGray"
+                />
+
+            <TextView
+                android:id="@+id/year_label"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="16sp"
+                android:layout_below="@+id/model"
+                android:layout_toEndOf="@+id/car_name"
+                android:text="@string/year"
+                android:textColor="#000"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:textSize="16sp"
+                android:layout_alignTop="@+id/year_label"
+                android:layout_alignStart="@+id/model"
+                android:text="1998"
+                android:gravity="center_vertical"
+                />
+
+            <TextView
+                android:id="@+id/distance_label"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="16sp"
+                android:layout_below="@+id/year"
+                android:layout_toEndOf="@+id/car_name"
+                android:text="@string/distance"
+                android:textColor="#000"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="16sp"
+                android:layout_alignTop="@+id/distance_label"
+                android:layout_toEndOf="@+id/distance_label"
+                android:layout_marginStart="10dp"
+                android:text="96564 km"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/accidents_label"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="16sp"
+                android:layout_alignTop="@+id/year"
+                android:layout_toEndOf="@+id/year"
+                android:layout_marginStart="10dp"
+                android:text="@string/accident"
+                android:textColor="#000"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/accidents"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:textSize="14sp"
+                android:layout_alignTop="@+id/accidents_label"
+                android:layout_toEndOf="@+id/accidents_label"
+                android:layout_marginLeft="10dp"
+                android:text="No"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/model_label"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignTop="@+id/car_name"
+                android:layout_toEndOf="@+id/car_name"
+                android:text="@string/model"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/model"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:textSize="14sp"
+                android:layout_alignTop="@+id/model_label"
+                android:layout_alignStart="@id/distance"
+                android:gravity="center_vertical"
+                android:text="TRX420FPM RANCHER 4X4 W/ POWER STEE"
+                />
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignStart="@id/distance_label"
+                android:layout_alignTop="@id/reserve_button"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:text="300k ILS"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/reserve_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignStart="@id/distance"
+                android:text="Reserve"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:background="@color/colorPrimary"
+                android:textColor="#fff" />
+            <ImageButton
+                android:id="@+id/favourite_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_toEndOf="@id/reserve_button"
+                android:layout_alignTop="@id/reserve_button"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/heart"
+                android:background="@color/colorPrimary"
+                />
+        </RelativeLayout>
+
+
+
+
+        <View android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="#b8b8b8"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -46,6 +46,14 @@ public class Car {
         return price;
     }
 
+    public String getPriceFormated() {
+        if (this.price < 1000) return "" + this.price;
+        int exp = (int) (Math.log(this.price) / Math.log(1000));
+        return String.format("%.1f %c",
+                this.price / Math.pow(1000, exp),
+                "kMGTPE".charAt(exp-1));
+    }
+
     public boolean isAccidents() {
         return accidents;
     }

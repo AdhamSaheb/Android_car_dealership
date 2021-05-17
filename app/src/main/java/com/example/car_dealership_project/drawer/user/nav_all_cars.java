@@ -2,13 +2,19 @@ package com.example.car_dealership_project.drawer.user;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.adapters.CarViewAdapter;
 
 
 /**
@@ -25,6 +31,10 @@ public class nav_all_cars extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
+    CarViewAdapter adapter;
 
     public nav_all_cars() {
         // Required empty public constructor
@@ -61,6 +71,24 @@ public class nav_all_cars extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nav_all_cars, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_nav_all_cars, container, false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Show all cars");
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        recyclerView = getView().findViewById(R.id.allCarsRecyclerView);
+        layoutManager = new LinearLayoutManager( getView().getContext() );
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new CarViewAdapter();
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }
