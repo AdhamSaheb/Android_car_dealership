@@ -7,6 +7,7 @@ public class User {
     private String email,password,country,city,gender,phone,firstName,lastName;
     private boolean isAdmin;
 
+    public User(){}
     public User(String email, String password, String country, String city, String gender, String phone, String firstName, String lastName,  boolean isAdmin) {
         this.email = email;
         this.password = password;

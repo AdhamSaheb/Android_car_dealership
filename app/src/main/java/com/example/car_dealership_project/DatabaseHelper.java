@@ -72,6 +72,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update("USERS", contentValues,"EMAIL =?" , new String[] {users.getEmail()}  );
     }
 
+    public User getUser(String email){
+        try {
+            SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+            Cursor query = sqLiteDatabase.rawQuery("SELECT * FROM USERS WHERE EMAIL=?", new String[] {email});
+            query.moveToFirst();
+//            Log.e("GetUser",String.valueOf(query.getColumnCount()));
+            int passwordIndex = query.getColumnIndexOrThrow("PASSWORD");
+            int cityIndex = query.getColumnIndexOrThrow("CITY");
+            int countryIndex = query.getColumnIndexOrThrow("COUNTRY");
+            int phoneIndex = query.getColumnIndexOrThrow("PHONE");
+            int fnIndex = query.getColumnIndexOrThrow("FIRSTNAME");
+            int lnIndex = query.getColumnIndexOrThrow("LASTNAME");
+            int genderIndex = query.getColumnIndexOrThrow("GENDER");
+            int adminIndx = query.getColumnIndexOrThrow("IsADMIN");
+            String password = query.getString(passwordIndex);
+            String country = query.getString(countryIndex);
+            String city = query.getString(cityIndex);
+            String phone = query.getString(phoneIndex);
+            String firstName = query.getString(fnIndex);
+            String lastName = query.getString(lnIndex);
+            String gender = query.getString(genderIndex);
+            boolean isAdmin =  query.getInt(adminIndx) > 0;
+            return new User(email,password,country,city,gender,phone,firstName,lastName,isAdmin);
+//            Log.e("GetUser", password + country + city + phone + firstName + lastName + gender + isAdmin);
+//            return new User();
+        } catch (Exception e){
+            Log.e("GETUSER",e.toString());
+            throw e;
+        }
+    }
+
     public Cursor getAllUsers() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT * FROM USERS", null);

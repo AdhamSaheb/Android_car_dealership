@@ -92,7 +92,9 @@ public class nav_favorites extends Fragment {
         layoutManager = new GridLayoutManager( this.getContext(), 2 );
         recyclerView.setLayoutManager(layoutManager);
         DatabaseHelper databaseHelper = new DatabaseHelper(getView().getContext(), "Project", null, 1);
-        adapter = new CarFavAdapter(databaseHelper.getFavourites("amjad@test.com"));
+        Utility uti = new Utility(getActivity());
+        String email = uti.getEmail();
+        adapter = new CarFavAdapter(databaseHelper.getFavourites(email));
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
