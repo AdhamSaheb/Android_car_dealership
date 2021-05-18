@@ -20,6 +20,7 @@ public class CarJsonParser {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject = (JSONObject) jsonArray.get(i);
                     Car car = new Car();
+                    car.setId(i);
                     car.setBrand(jsonObject.getString("make"));
                     car.setModel(jsonObject.getString("model"));
                     car.setYear(jsonObject.getInt("year"));

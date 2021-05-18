@@ -5,8 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import com.example.car_dealership_project.models.Car;
+import com.example.car_dealership_project.utils.Utility;
+
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -22,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "PASSWORD TEXT ,CITY TEXT ,COUNTRY TEXT, PHONE TEXT, FIRSTNAME TEXT,LASTNAME TEXT," +
                 "GENDER TEXT, RESERVATIONS TEXT,FAVORITES TEXT , IsADMIN TEXT)");
 
-        db.execSQL("CREATE TABLE FAVORITES (EMAIL TEXT NOT NULL , TITLE TEXT NOT NULL, PRIMARY KEY(EMAIL , TITLE))");
+        db.execSQL("CREATE TABLE FAVORITES (EMAIL TEXT NOT NULL , MODEL TEXT NOT NULL, DISTANCE TEXT NOT NULL, PRIMARY KEY(EMAIL , MODEL, DISTANCE))");
         //db.execSQL("CREATE TABLE RESERVATIONS (EMAIL TEXT NOT NULL, TITLE TEXT NOT NULL,  QUANTITY INTEGER , PRIMARY KEY(EMAIL , TITLE))");
 
     }
@@ -72,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //return the hash value of password from database for a specific user
     public Cursor getPasswordForEmail(String email) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        return sqLiteDatabase.rawQuery("SELECT PASSWORD FROM USERS WHERE EMAIL = '" + email+"'", null);
+        return sqLiteDatabase.rawQuery("SELECT PASSWORD FROM USERS WHERE EMAIL='" + email+"'", null);
     }
 
     public Cursor isAdmin(String email) {
@@ -85,6 +93,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.rawQuery("SELECT FIRSTNAME FROM USERS WHERE EMAIL = '" + email+"'", null);
     }
 
+    public boolean addFavourite(String email, Car car) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("EMAIL", email);
+        contentValues.put("MODEL", car.getModel());
+        contentValues.put("DISTANCE", car.getDistance());
+        Long result = db.insert("FAVORITES", null,contentValues);
+        if(result == -1) return false;
+        else return true;
+    }
 
+    public List<Car> getFavourites(String email) {
+        List<Car> listRes = new ArrayList<Car>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor queryRes = db.rawQuery("SELECT * FROM FAVORITES WHERE EMAIL='"+email+"'", null);
+        int modelIndex = queryRes.getColumnIndex("MODEL");
+        int distanceIndex = queryRes.getColumnIndex("DISTANCE");
+        queryRes.moveToFirst();
+        while( queryRes.isAfterLast() == false){
+            String model = queryRes.getString(modelIndex);
+            String distance = queryRes.getString(distanceIndex);
+            for (Car car : Car.cars){
+                if( model.contentEquals(car.getModel()) && distance.contentEquals(car.getDistance()) ){
+                   listRes.add(car);
+                   break;
+                }
+            }
+            queryRes.moveToNext();
+        }
+        return listRes;
+    }
 
+    public boolean removeFavourite(String email, Car car) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete("FAVORITES", "EMAIL=? AND MODEL=? AND DISTANCE=?", new String[] { email, car.getModel(), car.getDistance()});
+        if(result == -1) return false;
+        else return true;
+    }
 }

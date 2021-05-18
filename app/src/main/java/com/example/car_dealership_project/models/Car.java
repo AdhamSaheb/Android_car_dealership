@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Car {
 
+    int id;
     private String brand ;
     private String model ;
     private String distance ; // because it has "km" in response
@@ -17,6 +18,7 @@ public class Car {
     }
 
     public Car(String brand, String model, String distance, int year, int price, boolean accidents, boolean offers) {
+        this.id = id;
         this.brand = brand;
         this.model = model;
         this.distance = distance;
@@ -25,6 +27,10 @@ public class Car {
         this.accidents = accidents;
         this.offers = offers;
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getBrand() {
         return brand;
