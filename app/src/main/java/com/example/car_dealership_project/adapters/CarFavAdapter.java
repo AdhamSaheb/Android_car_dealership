@@ -17,6 +17,7 @@ import com.example.car_dealership_project.R;
 import com.example.car_dealership_project.models.Car;
 import com.example.car_dealership_project.utils.Utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CarFavAdapter extends RecyclerView.Adapter<CarFavAdapter.ViewHolder> {
@@ -24,7 +25,9 @@ public class CarFavAdapter extends RecyclerView.Adapter<CarFavAdapter.ViewHolder
     private List<Car> carsList;
     private DatabaseHelper databaseHelper;
 
-    public CarFavAdapter(List<Car> cars){this.carsList = cars;}
+    public CarFavAdapter(List<Car> cars){
+        this.carsList = new ArrayList<Car>(cars);
+    }
 
     @NonNull
     @Override

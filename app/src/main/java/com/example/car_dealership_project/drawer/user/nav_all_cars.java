@@ -5,16 +5,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.car_dealership_project.R;
 import com.example.car_dealership_project.adapters.CarViewAdapter;
+import com.example.car_dealership_project.models.Car;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -35,6 +43,7 @@ public class nav_all_cars extends Fragment {
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     CarViewAdapter adapter;
+    private SearchView searchView;
 
     public nav_all_cars() {
         // Required empty public constructor
@@ -79,7 +88,24 @@ public class nav_all_cars extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initSearchView();
         initRecyclerView();
+    }
+
+    private void initSearchView() {
+        SearchView searchView = (SearchView) getActivity().findViewById(R.id.recyclerSearchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -91,4 +117,5 @@ public class nav_all_cars extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+
 }

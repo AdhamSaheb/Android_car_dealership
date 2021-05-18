@@ -1,10 +1,13 @@
 package com.example.car_dealership_project.adapters;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +23,10 @@ import com.example.car_dealership_project.utils.Utility;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHolder> {
+public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHolder> implements Filterable {
 
     private List<Car> carsList;
     DatabaseHelper dataBaseHelper;
@@ -31,7 +35,7 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
 //            DatabaseHelper( ,"Project",null,1);
 
     public CarViewAdapter(){
-        this.carsList = Car.cars;
+        this.carsList = new ArrayList<Car>(Car.cars);
     }
 
     @NonNull
@@ -72,6 +76,37 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
     public int getItemCount() {
         return carsList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+    private Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Car> filteredCars = new ArrayList<Car>();
+            Log.i("FILTER", charSequence.toString());
+            if( charSequence == null || charSequence.length() == 0){
+                filteredCars.addAll(Car.cars);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for( Car car: carsList){
+                    if(car.getBrand().toLowerCase().contains(filterPattern))
+                        filteredCars.add(car);
+                }
+            }
+            FilterResults res = new FilterResults();
+            res.values = filteredCars;
+            return res;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            carsList.clear();
+            carsList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
