@@ -15,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.car_dealership_project.R;
 import com.example.car_dealership_project.adapters.CarViewAdapter;
@@ -93,6 +96,7 @@ public class nav_all_cars extends Fragment {
     }
 
     private void initSearchView() {
+        // Search bar init
         SearchView searchView = (SearchView) getActivity().findViewById(R.id.recyclerSearchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -102,18 +106,27 @@ public class nav_all_cars extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                Spinner spinner = getActivity().findViewById(R.id.searchViewDropdown);
+                adapter.getFilter(spinner).filter(newText);
                 return false;
             }
         });
+
+        // Dropdown init
+        adapter = new CarViewAdapter();
+        Spinner dropdown = getActivity().findViewById(R.id.searchViewDropdown);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.filter, R.layout.spinner_item);
+        spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        dropdown.setSelection(0);
+        dropdown.setAdapter(spinnerAdapter);
     }
+
 
     private void initRecyclerView() {
         recyclerView = getView().findViewById(R.id.allCarsRecyclerView);
         layoutManager = new LinearLayoutManager( getView().getContext() );
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CarViewAdapter();
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

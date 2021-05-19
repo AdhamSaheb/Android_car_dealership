@@ -6,22 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
 import com.example.car_dealership_project.models.Car;
 import com.example.car_dealership_project.utils.Utility;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +30,12 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
     private List<Car> carsList;
     DatabaseHelper dataBaseHelper;
     Utility uti;
-//    DatabaseHelper dataBaseHelper =new
-//            DatabaseHelper( ,"Project",null,1);
 
     public CarViewAdapter(){
         this.carsList = new ArrayList<Car>(Car.cars);
     }
 
+    /* <------------ Recycler View Stuff ------------> */
     @NonNull
     @Override
     public CarViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,10 +50,12 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
         String carName = carsList.get(position).getBrand();
         String model = carsList.get(position).getModel();
         String price = carsList.get(position).getPriceFormated();
+        long priceTag = carsList.get(position).getPrice();
         int year = carsList.get(position).getYear();
         boolean accident = carsList.get(position).isAccidents();
         String distance = carsList.get(position).getDistance();
-        holder.setData(carName,model,year,price,accident,distance);
+
+        holder.setData(carName,model,year,price, priceTag, accident,distance);
         holder.fav_button.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -77,36 +77,6 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
         return carsList.size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return filter;
-    }
-    private Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            List<Car> filteredCars = new ArrayList<Car>();
-            Log.i("FILTER", charSequence.toString());
-            if( charSequence == null || charSequence.length() == 0){
-                filteredCars.addAll(Car.cars);
-            } else {
-                String filterPattern = charSequence.toString().toLowerCase().trim();
-                for( Car car: carsList){
-                    if(car.getBrand().toLowerCase().contains(filterPattern))
-                        filteredCars.add(car);
-                }
-            }
-            FilterResults res = new FilterResults();
-            res.values = filteredCars;
-            return res;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            carsList.clear();
-            carsList.addAll((List) filterResults.values);
-            notifyDataSetChanged();
-        }
-    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -130,14 +100,71 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
             fav_button = itemView.findViewById(R.id.favourite_button);
             reserve_button = itemView.findViewById(R.id.reserve_button);
         }
-        public void setData(String carName, String model, int year, String price, boolean accident, String distance){
+        public void setData(String carName, String model, int year, String price, long priceRaw, boolean accident, String distance){
             this.car_name.setText(carName);
             this.model.setText(model);
             this.year.setText(year + "");
             this.price.setText(price);
+            this.price.setTag(priceRaw);
             this.accident.setText( accident ? "Yes" : "No");
             this.accident.setTextColor(accident ? Color.parseColor("#ff0000") : Color.parseColor("#00ff00"));
             this.distance.setText(distance);
         }
     }
+
+    /* <------------ Filtering Stuff ------------> */
+    //Empty filter will not be used
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                return null;
+            }
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            }
+        };
+    }
+
+    public Filter getFilter(Spinner spinner){
+        return new CustomFilter(spinner);
+    }
+
+    class CustomFilter extends Filter {
+
+        private Spinner spinner;
+        public CustomFilter(Spinner spinner) {
+            this.spinner = spinner;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            String field = this.spinner.getSelectedItem().toString();
+            List<Car> filteredCars = new ArrayList<Car>();
+
+//            List<Car> firstPass = new ArrayList<Car>();
+            if( charSequence == null || charSequence.length() == 0){
+                filteredCars.addAll(Car.cars);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for( Car car: carsList){
+                    String toCompare = (field.contains("Model") ? car.getModel().toLowerCase() : car.getBrand().toLowerCase() );
+                    if(toCompare.contains(filterPattern))
+                        filteredCars.add(car);
+                }
+            }
+            FilterResults res = new FilterResults();
+            res.values = filteredCars;
+            return res;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            carsList.clear();
+            carsList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    }
+
 }

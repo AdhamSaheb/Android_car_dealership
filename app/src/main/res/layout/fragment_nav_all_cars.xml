@@ -7,14 +7,31 @@
     android:orientation="vertical"
     tools:context=".drawer.user.nav_all_cars">
 
-    <androidx.appcompat.widget.SearchView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerSearchView"
-        app:iconifiedByDefault="false"
-        app:queryHint="Search for a car">
+        android:orientation="horizontal"
+        android:weightSum="6">
+        <androidx.appcompat.widget.SearchView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerSearchView"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search for a car"
+            android:layout_weight="4"
+            />
 
-    </androidx.appcompat.widget.SearchView>
+        <Spinner
+            android:id="@+id/searchViewDropdown"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:entries="@array/filter"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allCarsRecyclerView"
         android:layout_width="match_parent"
