@@ -1,14 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".drawer.user.nav_home_user">
+   <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:src="@drawable/home_bg"
+      />
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="vertical"
+       android:layout_marginTop="20dp"
+      >
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="Abu sager Automotive "
+             android:textStyle="bold"
+             android:textSize="25sp"
+             android:gravity="center"
+             android:textColor="#000"
+         />
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="ابو صقر لأجار السيارات"
+           android:textStyle="bold"
+           android:textSize="25sp"
+           android:gravity="center"
+           android:textColor="#000"
+           android:layout_marginBottom="10dp"
+           />
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="لسنا الوحيدين لكننا الافضل"
+           android:textStyle="bold"
+           android:textSize="20sp"
+           android:gravity="center"
+           android:layout_marginBottom="20dp"
+           />
+           <androidx.cardview.widget.CardView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:cardCornerRadius="5dp"
+               app:cardUseCompatPadding="true"
+               app:cardBackgroundColor="#f0f0f0"
+               android:layout_marginHorizontal="20dp"
+               >
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="vertical"
+                >
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text="تشكيله مميزه شفرليت، فورد، بي ام، فيراري."
+                       android:textStyle="bold"
+                       android:textSize="18sp"
+                       android:gravity="center"
+                       />
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text=" افضل الاسعار و عروض على مدار الساعه."
+                       android:textStyle="bold"
+                       android:textSize="18sp"
+                       android:gravity="center"
+                       />
+               </LinearLayout>
+           </androidx.cardview.widget.CardView>
 
-</FrameLayout>
+   </LinearLayout>
+</LinearLayout>
