@@ -1,6 +1,7 @@
 package com.example.car_dealership_project.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Car {
 
@@ -107,5 +108,14 @@ public class Car {
                 ", accidents=" + accidents +
                 ", offers=" + offers +
                 '}';
+    }
+
+    public static List<Car> getOffers() {
+        List<Car> res = new ArrayList<Car>();
+        for( Car car : cars) {
+            if(car.isOffers())
+                res.add(car);
+        }
+        return res;
     }
 }

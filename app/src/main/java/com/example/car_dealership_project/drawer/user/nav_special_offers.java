@@ -2,13 +2,24 @@ package com.example.car_dealership_project.drawer.user;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.adapters.CarFavAdapter;
+import com.example.car_dealership_project.adapters.CarOfferAdapter;
+import com.example.car_dealership_project.models.Car;
+import com.example.car_dealership_project.utils.Utility;
 
 
 /**
@@ -25,6 +36,10 @@ public class nav_special_offers extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
+    CarOfferAdapter adapter;
 
     public nav_special_offers() {
         // Required empty public constructor
@@ -57,10 +72,26 @@ public class nav_special_offers extends Fragment {
         }
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nav_special_offers, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_nav_special_offers, container, false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Special offers");
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        recyclerView = getView().findViewById(R.id.offerRecylerView);
+        layoutManager = new LinearLayoutManager( this.getContext() );
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new CarOfferAdapter(Car.cars);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

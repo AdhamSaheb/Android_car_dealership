@@ -24,5 +24,6 @@
     <string name="model">Model:</string>
     <string name="price">Price</string>
     <string name="distance">Distance</string>
+    <string name="reserve_now">Reserve Now</string>
 
 </resources>

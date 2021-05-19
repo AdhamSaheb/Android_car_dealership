@@ -22,4 +22,12 @@ public class Utility {
                 "SignedIn", Context.MODE_PRIVATE);
         return prefs.getString("Email" , "Default");
     }
+
+    public static String getFormatedNumber(int price) {
+        if (price < 1000) return "" + price;
+        int exp = (int) (Math.log(price) / Math.log(1000));
+        return String.format("%.1f %c",
+                price / Math.pow(1000, exp),
+                "kMGTPE".charAt(exp-1));
+    }
 }
