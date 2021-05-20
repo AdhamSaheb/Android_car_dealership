@@ -2,13 +2,29 @@ package com.example.car_dealership_project.drawer.admin;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 
+import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.adapters.AdminDeleteUserAdapter;
+import com.example.car_dealership_project.adapters.AdminReservationsAdapter;
+import com.example.car_dealership_project.models.User;
+import com.example.car_dealership_project.utils.Utility;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -29,6 +45,10 @@ public class nav_delete_user extends Fragment {
     public nav_delete_user() {
         // Required empty public constructor
     }
+
+    RecyclerView recyclerView;
+    GridLayoutManager layoutManager;
+    AdminDeleteUserAdapter adapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -62,5 +82,38 @@ public class nav_delete_user extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_nav_delete_user, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initSearchView();
+        initRecyclerView();
+    }
+
+    private void initSearchView() {
+        // Search bar init
+        SearchView searchView = (SearchView) getActivity().findViewById(R.id.allUsersSearchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
+    private void initRecyclerView() {
+        recyclerView = getView().findViewById(R.id.allUsersRecyclerView);
+        layoutManager = new GridLayoutManager( getView().getContext(), 2);
+        recyclerView.setLayoutManager(layoutManager);
+        DatabaseHelper databaseHelper = new DatabaseHelper(getView().getContext(), "Project", null, 1);
+        adapter = new AdminDeleteUserAdapter(getView().getContext(), databaseHelper.getAllUsersRaw());
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

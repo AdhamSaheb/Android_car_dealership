@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/fav_car_brand"
+                android:id="@+id/user_email"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Chevrolet"
@@ -31,7 +31,7 @@
                 android:background="@color/colorGray"
                 android:gravity="center"/>
             <TextView
-                android:id="@+id/fav_car_model"
+                android:id="@+id/user_firstname"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="TRX420FPM RANCHER 4X4 W/ POWER STEE"
@@ -59,7 +59,7 @@
                     android:src="@drawable/remove"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
+                    android:background="#F93154"
                     android:padding="5dp"/>
             </LinearLayout>
         </LinearLayout>

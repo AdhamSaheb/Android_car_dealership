@@ -11,9 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.example.car_dealership_project.models.Car;
 import com.example.car_dealership_project.models.Reservation;
+import com.example.car_dealership_project.models.User;
 
-import java.sql.Date;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +72,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update("USERS", contentValues,"EMAIL =?" , new String[] {users.getEmail()}  );
     }
 
+    public boolean deleteUser(String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long res = db.delete("USERS", "EMAIL=?", new String[]{email} );
+        return res != -1;
+    }
+
     public User getUser(String email){
         try {
             SQLiteDatabase sqLiteDatabase = getReadableDatabase();
@@ -107,6 +112,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllUsers() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT * FROM USERS", null);
+    }
+
+    public List<User> getAllUsersRaw() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        List<User> listRes = new ArrayList<User>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor queryRes = db.rawQuery("SELECT * FROM USERS", null);
+        queryRes.moveToFirst();
+        while(!queryRes.isAfterLast()){
+            //public User(String email, String password, String country, String city, String gender, String phone, String firstName, String lastName,  boolean isAdmin) {
+            int emailIndex = queryRes.getColumnIndex("EMAIL");
+            int passwordIndex = queryRes.getColumnIndex("PASSWORD");
+            int countryIndex = queryRes.getColumnIndex("COUNTRY");
+            int cityIndex = queryRes.getColumnIndex("CITY");
+            int genderIndex = queryRes.getColumnIndex("GENDER");
+            int phoneIndex = queryRes.getColumnIndex("PHONE");
+            int fnIndex = queryRes.getColumnIndex("FIRSTNAME");
+            int lnIndex = queryRes.getColumnIndex("LASTNAME");
+            int isAdmin = queryRes.getColumnIndex("IsADMIN");
+            User user = new User(queryRes.getString(emailIndex),
+                    queryRes.getString(passwordIndex),
+                    queryRes.getString(countryIndex),
+                    queryRes.getString(cityIndex),
+                    queryRes.getString(genderIndex),
+                    queryRes.getString(phoneIndex),
+                    queryRes.getString(fnIndex),
+                    queryRes.getString(lnIndex),
+                    queryRes.getInt(isAdmin) > 0);
+            listRes.add(user);
+            queryRes.moveToNext();
+        }
+        return listRes;
     }
 
     //return the hash value of password from database for a specific user

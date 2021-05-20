@@ -1,7 +1,6 @@
 package com.example.car_dealership_project.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,8 +84,8 @@ public class CarFavAdapter extends RecyclerView.Adapter<CarFavAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            car_name = itemView.findViewById(R.id.fav_car_brand);
-            model = itemView.findViewById(R.id.fav_car_model);
+            car_name = itemView.findViewById(R.id.user_email);
+            model = itemView.findViewById(R.id.user_firstname);
             reserve_button = itemView.findViewById(R.id.fav_reserve_button);
             remove_button = itemView.findViewById(R.id.fav_remove_button);
         }

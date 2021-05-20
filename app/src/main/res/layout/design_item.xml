@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -142,7 +142,7 @@
                 android:layout_alignTop="@id/reserve_button"
                 android:layout_marginStart="10dp"
                 android:src="@drawable/heart"
-                android:background="@color/colorPrimary"
+                android:background="#00B74A"
                 />
         </RelativeLayout>
 

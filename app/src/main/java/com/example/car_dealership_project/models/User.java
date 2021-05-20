@@ -1,4 +1,4 @@
-package com.example.car_dealership_project;
+package com.example.car_dealership_project.models;
 
 import java.util.ArrayList;
 

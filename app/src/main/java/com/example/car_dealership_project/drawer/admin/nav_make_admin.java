@@ -1,6 +1,5 @@
 package com.example.car_dealership_project.drawer.admin;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -18,10 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.car_dealership_project.DatabaseHelper;
-import com.example.car_dealership_project.Login;
 import com.example.car_dealership_project.R;
-import com.example.car_dealership_project.SignUp;
-import com.example.car_dealership_project.User;
+import com.example.car_dealership_project.models.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
