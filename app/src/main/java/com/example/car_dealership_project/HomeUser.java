@@ -56,6 +56,7 @@ public class HomeUser extends AppCompatActivity {
                 .build();
         //hide un needed items from drawer
         if(isAdmin()) {
+
             navigationView.getMenu().findItem(R.id.nav_home_user).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_all_cars).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_user_reservations).setVisible(false);
@@ -63,6 +64,7 @@ public class HomeUser extends AppCompatActivity {
             navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_call_us).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_profile).setVisible(false);
+
         }else{
             navigationView.getMenu().findItem(R.id.nav_make_admin).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_delete_user).setVisible(false);
@@ -71,9 +73,13 @@ public class HomeUser extends AppCompatActivity {
         }
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
+        if(isAdmin()){
+            System.out.println("Here");
+            navController.navigate(R.id.nav_home_admin);
+        }
 
         //set logout button action
         navigationView.getMenu().findItem(R.id.logoutButton).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
