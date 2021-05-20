@@ -2,13 +2,21 @@ package com.example.car_dealership_project.drawer.admin;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.adapters.AdminReservationsAdapter;
+import com.example.car_dealership_project.adapters.CarReservationsAdapter;
+import com.example.car_dealership_project.utils.Utility;
 
 
 /**
@@ -29,6 +37,10 @@ public class nav_view_all_reserves extends Fragment {
     public nav_view_all_reserves() {
         // Required empty public constructor
     }
+
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
+    AdminReservationsAdapter adapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -62,5 +74,23 @@ public class nav_view_all_reserves extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_nav_view_all_reserves, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        recyclerView = getView().findViewById(R.id.allReservesRecyclerView);
+        layoutManager = new LinearLayoutManager( this.getContext() );
+        recyclerView.setLayoutManager(layoutManager);
+        DatabaseHelper databaseHelper = new DatabaseHelper(getView().getContext(), "Project", null, 1);
+        Utility uti = new Utility(getActivity());
+        String email = uti.getEmail();
+        adapter = new AdminReservationsAdapter(getView().getContext(), databaseHelper.getAllReservations());
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

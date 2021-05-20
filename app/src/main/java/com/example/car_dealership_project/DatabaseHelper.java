@@ -187,7 +187,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 if( model.contentEquals(car.getModel()) && distance.contentEquals(car.getDistance()) ){
                     String date = queryRes.getString( queryRes.getColumnIndex("RESERVED_ON"));
 
-                    listRes.add(new Reservation(car, date));
+                    listRes.add(new Reservation(car, date, email));
+                    break;
+                }
+            }
+            queryRes.moveToNext();
+        }
+        return listRes;
+    }
+
+    public List<Reservation> getAllReservations(){
+        List<Reservation> listRes = new ArrayList<Reservation>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor queryRes = db.rawQuery("SELECT * FROM RESERVATIONS", null);
+        int modelIndex = queryRes.getColumnIndex("MODEL");
+        int distanceIndex = queryRes.getColumnIndex("DISTANCE");
+        int emailIndex = queryRes.getColumnIndex("EMAIL");
+        queryRes.moveToFirst();
+        while(!queryRes.isAfterLast()){
+            String model = queryRes.getString(modelIndex);
+            String distance = queryRes.getString(distanceIndex);
+            for (Car car : Car.cars){
+                if( model.contentEquals(car.getModel()) && distance.contentEquals(car.getDistance()) ){
+                    String date = queryRes.getString( queryRes.getColumnIndex("RESERVED_ON"));
+
+                    listRes.add(new Reservation(car, date, queryRes.getString(emailIndex)));
                     break;
                 }
             }

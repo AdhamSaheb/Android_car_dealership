@@ -6,13 +6,15 @@ public class Reservation {
 
     Car car;
     String reservedOn;
+    String email;
 
     public Reservation() {
     }
 
-    public Reservation(Car car, String date) {
+    public Reservation(Car car, String date, String email) {
         this.car = car;
         this.reservedOn = date;
+        this.email = email;
     }
 
     public Car getCar() {
@@ -29,5 +31,13 @@ public class Reservation {
 
     public void setReservedOn(String reservedOn) {
         this.reservedOn = reservedOn;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
