@@ -1,5 +1,6 @@
 package com.example.car_dealership_project.adapters;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,10 +11,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.ReserveDialog;
 import com.example.car_dealership_project.models.Car;
 import com.example.car_dealership_project.utils.Utility;
 
@@ -24,9 +28,11 @@ public class CarOfferAdapter extends RecyclerView.Adapter<CarOfferAdapter.ViewHo
 
     private List<Car> carsList;
     private DatabaseHelper databaseHelper;
+    private Context context;
 
-    public CarOfferAdapter(List<Car> cars){
+    public CarOfferAdapter(Context context, List<Car> cars){
         this.carsList = new ArrayList<Car>(cars);
+        this.context = context;
     }
 
     @NonNull
@@ -53,15 +59,18 @@ public class CarOfferAdapter extends RecyclerView.Adapter<CarOfferAdapter.ViewHo
         Log.e("PREV AFTER", prevNum + " " + afterNum);
         after = Utility.getFormatedNumber(afterNum);
 
-//        holder.remove_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//               databaseHelper.removeFavourite(Utility.getEmail(), carsList.get(position)) ;
-//               carsList.remove(carsList.get(position));
-//               notifyItemRemoved(position);
-//               notifyItemRangeChanged(position, getItemCount() - position);
-//            }
-//        });
+        holder.reserve_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    ReserveDialog dialog = new ReserveDialog(carsList.get(position));
+                    FragmentManager mngr = ((AppCompatActivity) context).getSupportFragmentManager();
+                    dialog.show(mngr, "Reserve dialog");
+                }catch(Exception e){
+                    Log.e("RESERVE", e.toString());
+                }
+            }
+        });
         holder.setData(carTitle, model, prev, after);
     }
 
@@ -76,6 +85,7 @@ public class CarOfferAdapter extends RecyclerView.Adapter<CarOfferAdapter.ViewHo
         private TextView offerModel;
         private TextView offerPrev;
         private TextView offerAfter;
+        private Button reserve_button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +93,7 @@ public class CarOfferAdapter extends RecyclerView.Adapter<CarOfferAdapter.ViewHo
             offerModel = itemView.findViewById(R.id.offerModel);
             offerPrev = itemView.findViewById(R.id.offerPrev);
             offerAfter = itemView.findViewById(R.id.offerAfter);
+            reserve_button = itemView.findViewById(R.id.offerReserveButton);
         }
         public void setData(String title, String model, String prev, String after){
             this.offerTitle.setText(title);

@@ -90,7 +90,7 @@ public class nav_special_offers extends Fragment {
         recyclerView = getView().findViewById(R.id.offerRecylerView);
         layoutManager = new LinearLayoutManager( this.getContext() );
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new CarOfferAdapter(Car.cars);
+        adapter = new CarOfferAdapter(getView().getContext(), Car.cars);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

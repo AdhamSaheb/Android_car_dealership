@@ -86,7 +86,6 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
                     Log.e("RESERVE", e.toString());
                 }
             }
-
         });
     }
 
