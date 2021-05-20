@@ -10,8 +10,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.example.car_dealership_project.models.Car;
-import com.example.car_dealership_project.utils.Utility;
+import com.example.car_dealership_project.models.Reservation;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "GENDER TEXT, RESERVATIONS TEXT,FAVORITES TEXT , IsADMIN TEXT)");
 
         db.execSQL("CREATE TABLE FAVORITES (EMAIL TEXT NOT NULL , MODEL TEXT NOT NULL, DISTANCE TEXT NOT NULL, PRIMARY KEY(EMAIL , MODEL, DISTANCE))");
-        //db.execSQL("CREATE TABLE RESERVATIONS (EMAIL TEXT NOT NULL, TITLE TEXT NOT NULL,  QUANTITY INTEGER , PRIMARY KEY(EMAIL , TITLE))");
+        db.execSQL("CREATE TABLE RESERVATIONS (EMAIL TEXT NOT NULL, MODEL TEXT NOT NULL,  DISTANCE TEXT NOT NULL, RESERVED_ON DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(EMAIL , MODEL, DISTANCE, RESERVED_ON))");
 
     }
 
@@ -125,14 +126,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean addFavourite(String email, Car car) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("EMAIL", email);
         contentValues.put("MODEL", car.getModel());
         contentValues.put("DISTANCE", car.getDistance());
-        Long result = db.insert("FAVORITES", null,contentValues);
-        if(result == -1) return false;
-        else return true;
+        long result = db.insert("FAVORITES", null,contentValues);
+        return result != -1;
     }
 
     public List<Car> getFavourites(String email) {
@@ -142,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int modelIndex = queryRes.getColumnIndex("MODEL");
         int distanceIndex = queryRes.getColumnIndex("DISTANCE");
         queryRes.moveToFirst();
-        while( queryRes.isAfterLast() == false){
+        while(!queryRes.isAfterLast()){
             String model = queryRes.getString(modelIndex);
             String distance = queryRes.getString(distanceIndex);
             for (Car car : Car.cars){
@@ -161,5 +161,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = db.delete("FAVORITES", "EMAIL=? AND MODEL=? AND DISTANCE=?", new String[] { email, car.getModel(), car.getDistance()});
         if(result == -1) return false;
         else return true;
+    }
+
+    public boolean reserveCar(String email, Car car) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("EMAIL", email);
+        contentValues.put("MODEL", car.getModel());
+        contentValues.put("DISTANCE", car.getDistance());
+        long result = db.insert("RESERVATIONS", null,contentValues);
+        return result != -1;
+    }
+
+    public List<Reservation> getReserved(String email){
+        List<Reservation> listRes = new ArrayList<Reservation>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor queryRes = db.rawQuery("SELECT * FROM RESERVATIONS WHERE EMAIL='"+email+"'", null);
+        int modelIndex = queryRes.getColumnIndex("MODEL");
+        int distanceIndex = queryRes.getColumnIndex("DISTANCE");
+        queryRes.moveToFirst();
+        while(!queryRes.isAfterLast()){
+            String model = queryRes.getString(modelIndex);
+            String distance = queryRes.getString(distanceIndex);
+            for (Car car : Car.cars){
+                if( model.contentEquals(car.getModel()) && distance.contentEquals(car.getDistance()) ){
+                    String date = queryRes.getString( queryRes.getColumnIndex("RESERVED_ON"));
+
+                    listRes.add(new Reservation(car, date));
+                    break;
+                }
+            }
+            queryRes.moveToNext();
+        }
+        return listRes;
     }
 }

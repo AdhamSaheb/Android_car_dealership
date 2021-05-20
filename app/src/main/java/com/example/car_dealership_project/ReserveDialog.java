@@ -4,16 +4,19 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.car_dealership_project.models.Car;
+import com.example.car_dealership_project.utils.Utility;
 
 public class ReserveDialog extends DialogFragment {
 
@@ -53,7 +56,17 @@ public class ReserveDialog extends DialogFragment {
             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                   DatabaseHelper databaseHelper = new DatabaseHelper(getActivity(), "Project", null, 1);
+                   Utility uti = new Utility(getActivity());
+                   boolean result = databaseHelper.reserveCar(uti.getEmail(), car);
+                    if(result){
+                        Toast toast = Toast.makeText(getActivity(), "Reserved "+ car.getModel(), Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else {
+                        Toast toast = Toast.makeText(getActivity(), "Failed to reserve", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
             });
         return builder.create();

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        android:textAlignment="center"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                app:cardCornerRadius="5dp"
+                android:layout_margin="5dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="8">
+                    <TextView
+                        android:id="@+id/reserveTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:textColor="#000"
+                        android:text="CHEVROLET"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:layout_weight="3"
+                        />
+                    <TextView
+                        android:id="@+id/reserveModel"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:textColor="#000"
+                        android:text="TRX420FPM RANCHER 4X4 W/ POWER STEE"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_weight="3"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="2"
+                        android:weightSum="8"
+                        android:gravity="center_vertical"
+                        >
+                        <TextView
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:text="Reserved On:"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:layout_weight="2"
+                            />
+                        <TextView
+                            android:id="@+id/reserveDate"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:text="May 20, 22:18:20"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:layout_weight="6"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
