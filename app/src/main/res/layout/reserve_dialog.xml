@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    >
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dialogBrand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Chevrolet"
+        />
+
+    <LinearLayout
+        android:id="@+id/dialogBodyModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialogBrand"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Model: "
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/dialogModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TRX420FPM RANCHER 4X4 W/ POWER STEE"
+            android:textSize="16sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/dialogBodyPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialogBodyModel"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price:  "
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/dialogPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="300k"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+</RelativeLayout>

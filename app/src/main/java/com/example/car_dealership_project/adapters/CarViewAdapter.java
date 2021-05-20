@@ -1,12 +1,12 @@
 package com.example.car_dealership_project.adapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -15,10 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.ReserveDialog;
 import com.example.car_dealership_project.models.Car;
 import com.example.car_dealership_project.utils.Utility;
 
@@ -30,9 +33,11 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
     private List<Car> carsList;
     DatabaseHelper dataBaseHelper;
     Utility uti;
+    Context context;
 
-    public CarViewAdapter(){
+    public CarViewAdapter(Context context){
         this.carsList = new ArrayList<Car>(Car.cars);
+        this.context = context;
     }
 
     /* <------------ Recycler View Stuff ------------> */
@@ -46,7 +51,7 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CarViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final CarViewAdapter.ViewHolder holder, final int position) {
         String carName = carsList.get(position).getBrand();
         String model = carsList.get(position).getModel();
         String price = carsList.get(position).getPriceFormated();
@@ -69,6 +74,19 @@ public class CarViewAdapter extends RecyclerView.Adapter<CarViewAdapter.ViewHold
                     toast.show();
                 }
             }
+        });
+        holder.reserve_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    ReserveDialog dialog = new ReserveDialog(carsList.get(position));
+                    FragmentManager mngr = ((AppCompatActivity) context).getSupportFragmentManager();
+                    dialog.show(mngr, "Reserve dialog");
+                }catch(Exception e){
+                    Log.e("RESERVE", e.toString());
+                }
+            }
+
         });
     }
 

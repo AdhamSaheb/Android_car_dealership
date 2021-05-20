@@ -113,7 +113,7 @@ public class nav_all_cars extends Fragment {
         });
 
         // Dropdown init
-        adapter = new CarViewAdapter();
+        adapter = new CarViewAdapter(getContext());
         Spinner dropdown = getActivity().findViewById(R.id.searchViewDropdown);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.filter, R.layout.spinner_item);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
