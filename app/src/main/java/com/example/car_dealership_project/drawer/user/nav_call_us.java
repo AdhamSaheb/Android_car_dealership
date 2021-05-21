@@ -87,15 +87,17 @@ public class nav_call_us extends Fragment {
         public void onClick(View view) {
             Intent gmailIntent =new Intent();
             try {
-                gmailIntent.setAction(Intent.ACTION_SENDTO);
-                gmailIntent.setDataAndType(Uri.parse("mailto:"), "message/rfc822");
-                gmailIntent.putExtra(Intent.EXTRA_EMAIL, "CarDealer@cars.com");
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String[] strTo = { "CarDealer@cars.com" };
+                intent.putExtra(Intent.EXTRA_EMAIL, strTo);
+                intent.setType("message/rfc822");
+                intent.setPackage("com.google.android.gm");
+                startActivity(intent);
             }catch (Exception e ) {
                 e.printStackTrace();
             }
 //            gmailIntent.putExtra(Intent.EXTRA_SUBJECT,"My Subject");
-//            gmailIntent.putExtra(Intent.EXTRA_TEXT,"Content of the message");
-            startActivity(gmailIntent);
+//            gmailIntent.putExtra(Intent.EXTRA_TEXT,"Content of the message");//           startActivity(gmailIntent);
         } });
         //Map Button
         mapsButton.setOnClickListener(new View.OnClickListener() { @Override
