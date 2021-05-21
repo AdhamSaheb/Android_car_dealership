@@ -57,21 +57,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert("USERS", null, contentValues);
     }
 
-    public void updateUser(User users) {
+    public void updateUser(String email, String city, String country, String phone, String firstName, String lastName) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("EMAIL", users.getEmail());
-        contentValues.put("PASSWORD", HashHelper.md5( users.getPassword()));
-        contentValues.put("CITY", users.getCity());
-        contentValues.put("COUNTRY", users.getCountry());
-        contentValues.put("GENDER", users.getGender());
-        contentValues.put("PHONE", users.getPhone());
-        contentValues.put("FIRSTNAME", users.getFirstName());
-        contentValues.put("LASTNAME", users.getLastName());
-        contentValues.put("IsADMIN", users.getisAdmin());
-        db.update("USERS", contentValues,"EMAIL =?" , new String[] {users.getEmail()}  );
+        contentValues.put("CITY", city);
+        contentValues.put("COUNTRY", country);
+        contentValues.put("PHONE", phone);
+        contentValues.put("FIRSTNAME", firstName);
+        contentValues.put("LASTNAME", lastName);
+        db.update("USERS", contentValues,"EMAIL =?" , new String[] {email}  );
     }
 
+    public void updatePassword(String email, String password){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("PASSWORD", HashHelper.md5( password ));
+        db.update("USERS", contentValues,"EMAIL =?" , new String[] {email}  );
+    }
     public boolean deleteUser(String email){
         SQLiteDatabase db = this.getWritableDatabase();
         long res = db.delete("USERS", "EMAIL=?", new String[]{email} );

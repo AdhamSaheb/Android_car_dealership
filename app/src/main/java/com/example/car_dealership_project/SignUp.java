@@ -3,11 +3,8 @@ package com.example.car_dealership_project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -16,8 +13,6 @@ import android.widget.Toast;
 
 import com.example.car_dealership_project.models.User;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
@@ -25,16 +20,6 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        /*Spinner Options*/
-        final String[] genderOptions = { "Male", "Female" };
-        final String[] countryOptions = { "Palestine", "Jordan","France","Greece" };
-        final String[] countryCodeOptions = { "+970", "+975" ,"+0022","+0011" };
-        final String[][] cities = {
-                { "Jerusalem", "Ramallah","Nablus","Hebron" },
-                { "Amman", "Zarqa","Jerash","Irbid" },
-                { "Paris", "lel","leon","Nantes" },
-                { "Athens", "Patras","Rhodes","Sparti" },
-        };
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
@@ -52,30 +37,13 @@ public class SignUp extends AppCompatActivity {
         final Spinner genderSpinner =(Spinner) findViewById(R.id.genderSpinner);
         final Spinner countrySpinner =(Spinner) findViewById(R.id.countrySpinner);
         final Spinner citySpinner =(Spinner) findViewById(R.id.citySpinner);
+
+        final Validator validator = new Validator(this, zipCode,  emailText,firstName, lastName, passwordText, confirmPasswordText, phoneText, genderSpinner, countrySpinner, citySpinner);
         /*Buttons*/
         Button back = (Button)findViewById(R.id.backButton);
         Button registerButton = (Button)findViewById(R.id.registerButton);
-        /*Set options*/
-        ArrayAdapter<String> objGenderArr = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item, genderOptions);
-        genderSpinner.setAdapter(objGenderArr);
-        ArrayAdapter<String> objCountryArr = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item, countryOptions);
-        countrySpinner.setAdapter(objCountryArr);
-        /*Spinners on changed*/
-        countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-
-                // change zip code
-                zipCode.setText(countryCodeOptions[position]);
-                final ArrayAdapter<String> objCityArr = new ArrayAdapter<>( parentView.getContext() ,R.layout.support_simple_spinner_dropdown_item, cities[position]);
-                citySpinner.setAdapter(objCityArr);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
+        /*Init spinners*/
+        validator.setupSpinners();
 
         /* ----------- Actions --------- */
         //Back button Action
@@ -92,12 +60,13 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View view) {
                 errors.setText("");
                 //validate form
-                if(firstName.getText().toString().length() < 3 ) errors.append("\n* First Name must Be longer than 3 characters");
-                if(lastName.getText().toString().length() < 3 ) errors.append("\n* Last Name must Be longer than 3 characters");
-                if(!isEmailValid(emailText.getText().toString()))  errors.append("\n* Email Not valid");
-                if(!isPasswordValid(passwordText.getText().toString())) errors.append("\n* Password Not valid");
-                if( !passwordText.getText().toString().equals(confirmPasswordText.getText().toString())  ) errors.append("\n* Passwords Do not Match");
-                if( !isNotInDataBase(emailText.getText().toString())) errors.append("\n* Email already exists");
+                validator.validateString(firstName, "\n First name must be longer than 3 characters",errors);
+                validator.validateString(lastName, "\n Last name must be longer than 3 characters",errors);
+                validator.isEmailValid(errors);
+                validator.isPasswordValid(errors);
+                validator.isPasswordMatch(errors);
+                validator.isNotInDataBase(errors);
+
                 //After validation,check length of errors, if 0, then ok
                 if(errors.getText().toString().length()==0){
                     User user = new User(emailText.getText().toString() , passwordText.getText().toString() ,
@@ -106,7 +75,6 @@ public class SignUp extends AppCompatActivity {
                             genderSpinner.getSelectedItem().toString() ,
                             zipCode.getText().toString().concat(phoneText.getText().toString()),
                             firstName.getText().toString() , lastName.getText().toString(), false );
-                    System.out.println("User Created : \n"+user.toString());
                     DatabaseHelper dataBaseHelper =new
                             DatabaseHelper(getApplicationContext(),"Project",null,1);
                     //call create user function from database helper
@@ -123,38 +91,5 @@ public class SignUp extends AppCompatActivity {
             }
         });
     }
-
-
-    boolean isEmailValid(String email){
-        final String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-        //initialize the Pattern object
-        Pattern pattern = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        if (!matcher.matches()) return false ;
-        return true;
-    }
-
-    boolean isPasswordValid(String password){
-        if(!password.matches((".*[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz].*"))) return false ;
-        if(!password.matches((".*[0123456789].*"))) return false ;
-        if(!password.matches((".*[!@#$%^&*()_+].*"))) return false ;
-        if(password.length() < 5 ) return false ;
-        return true;
-    }
-
-    public boolean isNotInDataBase(String Email) {
-        DatabaseHelper dataBaseHelper =new
-                DatabaseHelper(this,"Project",null,1);
-        String ed = "";
-        final Cursor allUserseEmails = dataBaseHelper.getAllUsers();
-        while (allUserseEmails.moveToNext()) {
-            ed = allUserseEmails.getString(0);
-            if(ed.equals(Email)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 
 }

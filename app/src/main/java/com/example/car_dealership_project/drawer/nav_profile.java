@@ -4,14 +4,20 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.Validator;
 import com.example.car_dealership_project.models.User;
 import com.example.car_dealership_project.utils.Utility;
 
@@ -31,7 +37,8 @@ public class nav_profile extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private TextView name;
+    Validator validator;
+    private TextView email;
     private TextView firstName;
     private TextView lastName;
     private TextView country;
@@ -39,6 +46,22 @@ public class nav_profile extends Fragment {
     private TextView phone;
     private TextView gender;
 
+    private TextView zipCode;
+    private TextView updateErrors ;
+    private TextView passwordErrors ;
+    /* Edit Texts */
+    private EditText emailEdit ;
+    private EditText firstNameEdit ;
+    private EditText lastNameEdit ;
+    private EditText passwordText ;
+    private EditText confirmPasswordText ;
+    private EditText phoneText ;
+    /* Spinners */
+    private Spinner countrySpinner ;
+    private Spinner citySpinner ;
+
+    private Button updateProfileButton;
+    private Button updatePasswordButton;
     public nav_profile() {
         // Required empty public constructor
     }
@@ -77,7 +100,8 @@ public class nav_profile extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_nav_profile, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile Page");
-        this.name = rootView.findViewById(R.id.name);
+        final FragmentManager mngr = getFragmentManager();
+        this.email = rootView.findViewById(R.id.name);
         this.firstName = rootView.findViewById(R.id.firstName);
         this.lastName = rootView.findViewById(R.id.lastName);
         this.city = rootView.findViewById(R.id.city);
@@ -85,22 +109,94 @@ public class nav_profile extends Fragment {
         this.phone = rootView.findViewById(R.id.phoneNumber);
         this.gender = rootView.findViewById(R.id.gender);
 
-        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity(),"Project", null, 1);
+        zipCode = rootView.findViewById(R.id.profileZipCode);
+        /* Edit Texts */
+        firstNameEdit = rootView.findViewById(R.id.firstNameEdit);
+        lastNameEdit = rootView.findViewById(R.id.lastNameEdit);
+        passwordText = rootView.findViewById(R.id.profileNewPassword);
+        confirmPasswordText = rootView.findViewById(R.id.profileConfirmPassword);
+        phoneText = rootView.findViewById(R.id.phoneNumberEdit);
+        updateErrors = rootView.findViewById(R.id.updateProfileErrors);
+        passwordErrors = rootView.findViewById(R.id.updatePasswordErrors);
+        /* Spinners */
+        countrySpinner = rootView.findViewById(R.id.profileCountryEdit);
+        citySpinner = rootView.findViewById(R.id.profileCityEdit);
+        /* Buttons */
+        updateProfileButton = rootView.findViewById(R.id.updateProfileButton);
+        updatePasswordButton = rootView.findViewById(R.id.updatePasswordButton);
 
+        final DatabaseHelper databaseHelper = new DatabaseHelper(getActivity(),"Project", null, 1);
         Utility uti = new Utility(getActivity());
-        String email = uti.getEmail();
-        User currUser = databaseHelper.getUser(email);
+        final String userEmail = uti.getEmail();
+        User currUser = databaseHelper.getUser(userEmail);
+
+        /* Init validator */
+        validator = new Validator(getContext(),
+                zipCode,
+                null,
+                firstNameEdit,
+                lastNameEdit,
+                passwordText,
+                confirmPasswordText,
+                phoneText,
+                null,
+                countrySpinner,
+                citySpinner
+                );
+
+        validator.setupSpinners();
+
+        updateProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateErrors.setText("");
+                validator.validateString(firstNameEdit, "First name must be atleast 3 letters",updateErrors);
+                validator.validateString(lastNameEdit, "First name must be atleast 3 letters", updateErrors);
+                String city = citySpinner.getSelectedItem().toString();
+                String country = countrySpinner.getSelectedItem().toString();
+                String phone = phoneText.getText().toString();
+                String firstName = firstNameEdit.getText().toString();
+                String lastName = lastNameEdit.getText().toString();
+                if(updateErrors.getText().toString().length() == 0){
+                    databaseHelper.updateUser(userEmail, city, country, phone, firstName, lastName);
+                    if(mngr != null){
+                       mngr.beginTransaction().detach(nav_profile.this).attach(nav_profile.this).commit();
+                    }
+                    Toast toast = Toast.makeText(view.getContext(), "Successfully updated info", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
+        });
+
+        updatePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                passwordErrors.setText("");
+                validator.isPasswordValid(passwordErrors);
+                validator.isPasswordMatch(passwordErrors);
+                if(passwordErrors.getText().toString().length() == 0){
+                    databaseHelper.updatePassword(userEmail, passwordText.getText().toString().trim() );
+                    Toast toast = Toast.makeText(view.getContext(), "Successfully updated password", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
+        });
+
+
         String firstName = currUser.getFirstName();
         String lastName = currUser.getLastName();
-        String name = firstName.substring(0,1).toUpperCase() + firstName.substring(1) + " "
-                    + lastName.substring(0,1).toUpperCase() + lastName.substring(1);
-        this.name.setText(name);
+
+        this.email.setText(currUser.getEmail());
         this.firstName.setText(firstName);
         this.lastName.setText(lastName);
         this.city.setText(currUser.getCity());
         this.country.setText(currUser.getCountry());
         this.phone.setText(currUser.getPhone());
         this.gender.setText(currUser.getGender());
+
+        this.firstNameEdit.setText(firstName);
+        this.lastNameEdit.setText(lastName);
+        this.phoneText.setText(currUser.getPhone().substring(3));
         return rootView;
     }
 
