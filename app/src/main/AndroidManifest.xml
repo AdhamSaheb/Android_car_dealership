@@ -15,8 +15,8 @@
         <activity
             android:name=".HomeUser"
             android:label="@string/title_activity_home_user"
-            android:exported="true">
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"/>
         <activity android:name=".SignUp" />
         <activity android:name=".Login" />
         <activity android:name=".MainActivity">

@@ -2,6 +2,7 @@ package com.example.car_dealership_project.drawer.user;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -60,6 +61,7 @@ public class nav_home_user extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Home");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_nav_home_user, container, false);
     }

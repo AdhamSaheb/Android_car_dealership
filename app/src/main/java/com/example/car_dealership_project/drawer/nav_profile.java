@@ -1,5 +1,9 @@
 package com.example.car_dealership_project.drawer;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +24,11 @@ import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
 import com.example.car_dealership_project.Validator;
 import com.example.car_dealership_project.models.User;
+import com.example.car_dealership_project.utils.BitmapService;
 import com.example.car_dealership_project.utils.Utility;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 
 /**
@@ -45,6 +54,8 @@ public class nav_profile extends Fragment {
     private TextView city;
     private TextView phone;
     private TextView gender;
+
+    private ImageView profile_image;
 
     private TextView zipCode;
     private TextView updateErrors ;
@@ -93,12 +104,12 @@ public class nav_profile extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    public View rootView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_nav_profile, container, false);
+        rootView =  inflater.inflate(R.layout.fragment_nav_profile, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile Page");
         final FragmentManager mngr = getFragmentManager();
         this.email = rootView.findViewById(R.id.name);
@@ -108,6 +119,8 @@ public class nav_profile extends Fragment {
         this.country = rootView.findViewById(R.id.country);
         this.phone = rootView.findViewById(R.id.phoneNumber);
         this.gender = rootView.findViewById(R.id.gender);
+
+        profile_image = rootView.findViewById(R.id.profile_image);
 
         zipCode = rootView.findViewById(R.id.profileZipCode);
         /* Edit Texts */
@@ -183,6 +196,17 @@ public class nav_profile extends Fragment {
         });
 
 
+        //TODO :  do this
+        profile_image.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                 photoPickerIntent.setType("image/*");
+                 startActivityForResult(photoPickerIntent, 100);
+             }
+       });
+
+
         String firstName = currUser.getFirstName();
         String lastName = currUser.getLastName();
 
@@ -200,6 +224,29 @@ public class nav_profile extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch(requestCode) {
+            case 100:
+                if(resultCode == -1){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    BitmapService service = new BitmapService();
+                    Bitmap map = null;
+                    try {
+                        map = service.decodeUri(selectedImage,getContext());
+                        profile_image.setImageBitmap(map);
+                        System.out.println("Here");
+                    } catch (FileNotFoundException e) {
+                        System.out.println("Here But Error");
+                        e.printStackTrace();
+                    }
+
+                }
+        }
+    }
 
 
 }
+
+
