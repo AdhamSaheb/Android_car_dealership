@@ -1,10 +1,13 @@
 package com.example.car_dealership_project;
 
+import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -12,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.example.car_dealership_project.models.Car;
 import com.example.car_dealership_project.models.Reservation;
 import com.example.car_dealership_project.models.User;
+import com.example.car_dealership_project.utils.BitmapService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "GENDER TEXT, RESERVATIONS TEXT,FAVORITES TEXT , IsADMIN TEXT)");
 
         db.execSQL("CREATE TABLE FAVORITES (EMAIL TEXT NOT NULL , MODEL TEXT NOT NULL, DISTANCE TEXT NOT NULL, PRIMARY KEY(EMAIL , MODEL, DISTANCE))");
+        db.execSQL("CREATE TABLE PROFILEIMAGES (EMAIL TEXT NOT NULL , IMAGE BLOB NOT NULL,PRIMARY KEY(EMAIL , IMAGE))");
         db.execSQL("CREATE TABLE RESERVATIONS (EMAIL TEXT NOT NULL, MODEL TEXT NOT NULL,  DISTANCE TEXT NOT NULL, RESERVED_ON DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(EMAIL , MODEL, DISTANCE, RESERVED_ON))");
 
     }
@@ -258,4 +263,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return listRes;
     }
+
+
+
+    public void addImage(String email, byte[] image){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new  ContentValues();
+        cv.put("EMAIL" ,    email);
+        cv.put("IMAGE",   image);
+        db.insert( "PROFILEIMAGES", null, cv );
+
+    }
+
+    public void updateImage(String email, byte[] image){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new  ContentValues();
+        cv.put("EMAIL" ,    email);
+        cv.put("IMAGE",   image);
+        db.update( "PROFILEIMAGES", cv, "EMAIL =?" , new String[] {email} );
+    }
+
+    public Bitmap getImage(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT IMAGE FROM PROFILEIMAGES WHERE EMAIL = '" + email+"'", null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex("IMAGE");
+        System.out.println("index : " + index);
+        byte[] image = cursor.getBlob(index);
+        cursor.close();
+        BitmapService service = new BitmapService();
+        return service.getImage(image);
+    }
+
+    public boolean hasImage(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT IMAGE FROM PROFILEIMAGES WHERE EMAIL = '" + email+"'", null);
+        return (cursor!=null &&  cursor.getCount() > 0 ) ;
+    }
+
+
 }

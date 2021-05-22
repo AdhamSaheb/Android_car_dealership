@@ -4,14 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.car_dealership_project.utils.Utility;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -95,9 +97,18 @@ public class HomeUser extends AppCompatActivity {
         String firstName = getFirstName();
         View headerView = navigationView.getHeaderView(0);
         final TextView firstNameNav = (TextView) headerView.findViewById(R.id.nav_firstName);
-        firstNameNav.setText(firstName);
-        //TODO : set image
+        firstNameNav.setText("Hello "  + firstName);
 
+//        //Set profile image if exists
+//        DatabaseHelper dataBaseHelper = new
+//                DatabaseHelper(getApplicationContext(), "Project", null, 1);
+//        boolean hasImage = dataBaseHelper.hasImage(loadEmailFromLocal()) ;
+//        if(hasImage){
+//            ImageView profile_image = (ImageView) headerView.findViewById(R.id.nav_image);
+//            System.out.println(" has a profile image");
+//            Bitmap map = dataBaseHelper.getImage(loadEmailFromLocal());
+//            if(map!=null) profile_image.setImageBitmap(map);
+//        }
 
     }
 

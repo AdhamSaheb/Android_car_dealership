@@ -1,6 +1,8 @@
 package com.example.car_dealership_project.drawer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -108,6 +110,9 @@ public class nav_profile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final DatabaseHelper databaseHelper = new DatabaseHelper(getActivity(),"Project", null, 1);
+        Utility uti = new Utility(getActivity());
+
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.fragment_nav_profile, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile Page");
@@ -121,7 +126,13 @@ public class nav_profile extends Fragment {
         this.gender = rootView.findViewById(R.id.gender);
 
         profile_image = rootView.findViewById(R.id.profile_image);
-
+        //Set profile image if exists
+        boolean hasImage = databaseHelper.hasImage(Utility.getEmail()) ;
+        if(hasImage){
+            System.out.println(" has a profile image");
+            Bitmap map = databaseHelper.getImage(Utility.getEmail());
+            if(map!=null) profile_image.setImageBitmap(map);
+        }
         zipCode = rootView.findViewById(R.id.profileZipCode);
         /* Edit Texts */
         firstNameEdit = rootView.findViewById(R.id.firstNameEdit);
@@ -138,8 +149,7 @@ public class nav_profile extends Fragment {
         updateProfileButton = rootView.findViewById(R.id.updateProfileButton);
         updatePasswordButton = rootView.findViewById(R.id.updatePasswordButton);
 
-        final DatabaseHelper databaseHelper = new DatabaseHelper(getActivity(),"Project", null, 1);
-        Utility uti = new Utility(getActivity());
+
         final String userEmail = uti.getEmail();
         User currUser = databaseHelper.getUser(userEmail);
 
@@ -235,8 +245,18 @@ public class nav_profile extends Fragment {
                     Bitmap map = null;
                     try {
                         map = service.decodeUri(selectedImage,getContext());
+                        //conver to to byte stream
+                        byte[] bytes = service.getBytes(map);
+                        //check if image exists, if yes, update, else insert
+                        final DatabaseHelper databaseHelper = new DatabaseHelper(getActivity(),"Project", null, 1);
+                        boolean hasImage = databaseHelper.hasImage(Utility.getEmail()) ;
+                        if(hasImage){
+                            databaseHelper.updateImage(Utility.getEmail(),bytes);
+                        }else{
+                            databaseHelper.addImage(Utility.getEmail(),bytes);
+                        }
                         profile_image.setImageBitmap(map);
-                        System.out.println("Here");
+
                     } catch (FileNotFoundException e) {
                         System.out.println("Here But Error");
                         e.printStackTrace();
@@ -245,6 +265,8 @@ public class nav_profile extends Fragment {
                 }
         }
     }
+
+
 
 
 }
