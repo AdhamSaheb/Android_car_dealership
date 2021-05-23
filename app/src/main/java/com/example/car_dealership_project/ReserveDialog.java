@@ -64,7 +64,7 @@ public class ReserveDialog extends DialogFragment {
                         toast.show();
                     }
                     else {
-                        Toast toast = Toast.makeText(getActivity(), "Failed to reserve", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getActivity(), "Already reserved", Toast.LENGTH_LONG);
                         toast.show();
                     }
                 }

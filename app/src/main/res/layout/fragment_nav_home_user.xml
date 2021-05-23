@@ -41,21 +41,15 @@
                    android:layout_height="match_parent"
                    android:orientation="vertical"
                 >
+
                    <TextView
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       android:text="تشكيله مميزه شفرليت، فورد، بي ام، فيراري."
+                       android:text="Your automotive dealership needs in one platform"
                        android:textStyle="bold"
                        android:textSize="18sp"
                        android:gravity="center"
-                       />
-                   <TextView
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:text=" افضل الاسعار و عروض على مدار الساعه."
-                       android:textStyle="bold"
-                       android:textSize="18sp"
-                       android:gravity="center"
+                       android:paddingVertical="20dp"
                        />
                </LinearLayout>
 

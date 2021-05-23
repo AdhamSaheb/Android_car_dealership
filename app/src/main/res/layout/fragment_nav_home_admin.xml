@@ -5,10 +5,42 @@
     android:layout_height="match_parent"
     tools:context=".drawer.admin.nav_home_admin">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome back!"
+            android:textSize="25dp"
+            android:textColor="#000"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Here's the monthly app stats"/>
+        <TextView
+            android:id="@+id/userNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Regstered users: 4"
+            />
+        <TextView
+            android:id="@+id/resrvNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reservations: 20"
+            />
+        <TextView
+            android:id="@+id/priceNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Income this month: 2.4k"
+            />
+    </LinearLayout>
 </FrameLayout>

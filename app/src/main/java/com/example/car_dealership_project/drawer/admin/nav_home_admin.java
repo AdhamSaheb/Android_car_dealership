@@ -1,5 +1,6 @@
 package com.example.car_dealership_project.drawer.admin;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,8 +9,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.car_dealership_project.DatabaseHelper;
 import com.example.car_dealership_project.R;
+import com.example.car_dealership_project.models.Reservation;
+import com.example.car_dealership_project.utils.Utility;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 
 /**
@@ -26,6 +35,11 @@ public class nav_home_admin extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    TextView usersNum;
+    TextView resrvNum;
+    TextView priceNum;
+    DatabaseHelper databaseHelper;
 
     public nav_home_admin() {
         // Required empty public constructor
@@ -62,7 +76,24 @@ public class nav_home_admin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Home");
+        View rootView = inflater.inflate(R.layout.fragment_nav_home_admin, container, false);
+        this.usersNum = rootView.findViewById(R.id.userNum);
+        this.priceNum = rootView.findViewById(R.id.priceNum);
+        this.resrvNum = rootView.findViewById(R.id.resrvNum);
+        databaseHelper = new DatabaseHelper(getContext(), "Project", null, 1);
+
+        Cursor users = databaseHelper.getAllUsers();
+        this.usersNum.setText(" Registered users: " + users.getCount());
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nav_home_admin, container, false);
+
+        List<Reservation> resvList = databaseHelper.getAllReservations();
+        this.resrvNum.setText("Reservations: " + resvList.size());
+
+        int sum = 0;
+        for(Reservation resv : resvList) {
+            sum += resv.getCar().getPrice();
+        }
+        this.priceNum.setText("Total earned: " + Utility.getFormatedNumber(sum));
+        return rootView;
     }
 }

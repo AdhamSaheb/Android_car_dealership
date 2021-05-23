@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,11 +128,11 @@ public class nav_profile extends Fragment {
 
         profile_image = rootView.findViewById(R.id.profile_image);
         //Set profile image if exists
-        boolean hasImage = databaseHelper.hasImage(Utility.getEmail()) ;
-        if(hasImage){
-            System.out.println(" has a profile image");
+        try{
             Bitmap map = databaseHelper.getImage(Utility.getEmail());
             if(map!=null) profile_image.setImageBitmap(map);
+        } catch (Exception e ){
+            Log.e("IMAGE", "No profile image falling back to default" );
         }
         zipCode = rootView.findViewById(R.id.profileZipCode);
         /* Edit Texts */
